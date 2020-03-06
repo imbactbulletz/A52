@@ -9,11 +9,8 @@ fun main() {
 fun quickSort(array: Array<Int>) {
     fun sortInternal(startIndex: Int, endIndex: Int, array: Array<Int>) {
         when (endIndex - startIndex) {
-            0 -> {
-            }
-            1 -> {
-                if (array[startIndex] > array[endIndex]) swapIndexValues(startIndex, endIndex, array)
-            }
+            0 -> { } // no items to sort, same indexes
+            1 -> if (array[startIndex] > array[endIndex]) swapIndexValues(startIndex, endIndex, array) // two items, trivial swap
             else -> {
                 val updatedPivotIndex = partition(startIndex, endIndex, array)
                 if (updatedPivotIndex != startIndex) {
@@ -29,6 +26,7 @@ fun quickSort(array: Array<Int>) {
     val startIndex = 0
     val endIndex = array.size - 1
 
+    // do not sort arrays with 1 item
     if (array.size == 1) {
         return
     } else {
@@ -52,7 +50,7 @@ fun partition(startIndex: Int, endIndex: Int, array: Array<Int>): Int {
     var rightIndex = findIndexOfLastItemLesserThanOrEquals(pivot, startIndex, endIndex, array)
 
     while (leftIndex < rightIndex) {
-        if (leftIndex == -1 || rightIndex == -1) break
+        if (leftIndex == NOT_FOUND || rightIndex == NOT_FOUND) break
 
         swapIndexValues(leftIndex, rightIndex, array)
 
@@ -60,11 +58,11 @@ fun partition(startIndex: Int, endIndex: Int, array: Array<Int>): Int {
         rightIndex = findIndexOfLastItemLesserThanOrEquals(pivot, startIndex, --rightIndex, array)
     }
 
-    return if (rightIndex != -1) {
+    return if (rightIndex != NOT_FOUND) {
         swapIndexValues(startIndex, rightIndex, array)
         rightIndex
     } else {
-        -1
+        NOT_FOUND
     }
 }
 
@@ -77,7 +75,7 @@ fun findIndexOfFirstItemGreaterThan(value: Int, startIndex: Int, endIndex: Int, 
         currentIndex++
     }
 
-    return if (array[currentIndex] > value) currentIndex else -1
+    return if (array[currentIndex] > value) currentIndex else NOT_FOUND
 }
 
 fun findIndexOfLastItemLesserThanOrEquals(value: Int, startIndex: Int, endIndex: Int, array: Array<Int>): Int {
@@ -89,7 +87,7 @@ fun findIndexOfLastItemLesserThanOrEquals(value: Int, startIndex: Int, endIndex:
         currentIndex--
     }
 
-    return if (array[currentIndex] <= value) currentIndex else -1
+    return if (array[currentIndex] <= value) currentIndex else NOT_FOUND
 }
 
 fun swapIndexValues(firstIndex: Int, secondIndex: Int, array: Array<Int>) {
@@ -97,3 +95,5 @@ fun swapIndexValues(firstIndex: Int, secondIndex: Int, array: Array<Int>) {
     array[firstIndex] = array[secondIndex]
     array[secondIndex] = tmp
 }
+
+const val NOT_FOUND = -1
